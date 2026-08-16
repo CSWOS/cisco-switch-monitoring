@@ -43,18 +43,42 @@ chmod +x scripts/setup-ubuntu.sh
 
 ## 2. Enable gNMI on Cisco devices
 
-### IOS-XE
+> **Note:** On modern IOS-XE the old `gnmi-yang` command has been replaced by the unified **`gnxi`** command set.
+
+### IOS-XE (Catalyst 9000 / modern platforms)
+
+**Lab / Non-secure mode (easiest for testing):**
 ```cisco
 configure terminal
-gnmi-yang
+gnxi
+gnxi server
+! Optional: change port (default is usually 50052)
+! gnxi port 50051
 username monitoring privilege 15 secret YourStrongPassword
-ip http secure-server
-restconf
 end
 write memory
 ```
 
-### NX-OS
+**Secure mode (recommended for production):**
+```cisco
+configure terminal
+gnxi
+gnxi secure-server
+! or for self-signed:
+! gnxi secure-init
+username monitoring privilege 15 secret YourStrongPassword
+end
+write memory
+```
+
+Check status:
+```cisco
+show gnxi state
+show gnxi state detail
+```
+
+### NX-OS (Nexus)
+
 ```cisco
 configure terminal
 feature gnmi
@@ -68,7 +92,8 @@ copy running-config startup-config
 
 ## 3. Configure the project
 
-- **Telegraf** (`telegraf/telegraf.conf`) → put real switch IPs + credentials
+- **Telegraf** (`telegraf/telegraf.conf`) → put real switch IPs + credentials  
+  (use the correct port: 50051, 50052 or 9339 depending on your config)
 - **SNMP** (`snmp_exporter/snmp.yml`) → change community string
 - **Prometheus** (`prometheus/prometheus.yml`) → put switch IPs for SNMP + ICMP jobs
 
