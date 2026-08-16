@@ -1,0 +1,25 @@
+# Sensitive / local overrides
+*.local
+*.secret
+.env
+.env.*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Docker volumes / runtime
+prometheus_data/
+grafana_data/
+
+# Logs
+*.log
+logs/
+
+# Temporary
+tmp/
+temp/
+*.bak
