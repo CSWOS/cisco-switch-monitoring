@@ -29,7 +29,8 @@ services:
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     ports:
-      - "9273:9273"
+      - "9273:9273"    # Prometheus scrape endpoint
+      - "57000:57000"  # gRPC dial-out from Cisco switches (push)
     networks:
       - monitoring
 
